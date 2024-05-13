@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from uvicorn import run
-from app.db.setup import create_database
-from app.api.routes import paste, analytics
-from app.api.middlewares.exceptions import ExceptionHandlerMiddleware
+from db.setup import create_database
+from api.routes import paste, analytics
+from api.routes import share as share_routes
+from api.middlewares.exceptions import ExceptionHandlerMiddleware
 from dotenv import load_dotenv, find_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 import asyncio
-from app.config.scheduler import setup_scheduler, shutdown_scheduler
+from config.scheduler import setup_scheduler, shutdown_scheduler
 
 _ = load_dotenv(find_dotenv())
 scheduler = BackgroundScheduler()
@@ -33,6 +34,7 @@ app.add_middleware(ExceptionHandlerMiddleware)
 
 app.include_router(paste.router)
 app.include_router(analytics.router)
+app.include_router(share_routes.router)
 
 async def run_app():
         run("main:app", reload=True, port=8000, host="127.0.0.1")
