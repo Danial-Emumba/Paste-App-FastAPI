@@ -49,3 +49,26 @@ def delete_share(db: Session, id: int):
     db.delete(db_share)
     db.commit()
     return db_share
+
+def update_share(db: Session, id: int, share_update: ShareCreate):
+    """
+    Updates an existing share in the database.
+    Parameters:
+        - db: SQLAlchemy Session object for database operations.
+        - id: Integer representing the id of the share to update.
+        - share_update: ShareCreate object containing the updated data for the share.
+    Returns:
+        - The updated Share object.
+    Raises:
+        - HTTPException with status_code 404 if the share is not found.
+    """
+    db_share = db.query(Share).filter(Share.id == id).first()
+    if db_share is None:
+        raise HTTPException(status_code=404, detail="Share not found")
+    
+    for key, value in share_update.dict().items():
+        setattr(db_share, key, value)
+    
+    db.commit()
+    db.refresh(db_share)
+    return db_share
