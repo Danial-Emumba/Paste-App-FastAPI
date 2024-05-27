@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import secrets
 from app.db.repository import create_paste, get_paste_by_shortlink, delete_paste
 from app.storage.s3 import save_to_s3, get_paste_from_s3, delete_from_s3
-from app.services.analytics_service import increment_visit_count
+from app.api.services.analytics_service import increment_visit_count
 
 def generate_shortlink():
     return secrets.token_urlsafe(5)

@@ -1,10 +1,13 @@
 import boto3
-import os
 from fastapi import HTTPException
-aws_access_key_id = os.environ['AWS_ACCESS_KEY_ID']
-aws_secret_access_key = os.environ['AWS_SECRET_ACCESS_KEY']
-aws_default_region = os.environ['AWS_DEFAULT_REGION']
-s3_bucket_name = os.environ['S3_BUCKET_NAME']
+from app.config.settings import Settings
+
+settings = Settings()
+
+aws_access_key_id = settings.AWS_ACCESS_KEY_ID
+aws_secret_access_key = settings.AWS_SECRET_ACCESS_KEY
+aws_default_region = settings.AWS_REGION
+s3_bucket_name = settings.AWS_S3_BUCKET_NAME
 
 s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=aws_default_region)
 

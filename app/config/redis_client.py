@@ -1,7 +1,9 @@
 import redis
 import os
+from app.config.settings import Settings
 
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
-redis_port = os.environ.get('REDIS_PORT', 6379)
+settings = Settings()
+redis_host = settings.REDIS_HOST
+redis_port = settings.REDIS_PORT
 
 redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=0)
