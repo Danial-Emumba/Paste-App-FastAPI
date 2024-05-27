@@ -1,8 +1,10 @@
 from operator import and_
 from sqlalchemy.orm import Session
-from app.db.models import Paste
+from app.db.models.paste import Paste
 from datetime import datetime
 from fastapi.exceptions import HTTPException
+
+from app.db.models.user import User
 
 def create_paste(db: Session, shortlink: str, expires_at: int):
     try:
@@ -51,3 +53,20 @@ def delete_paste(db: Session, shortlink: str):
         return False
     except Exception as e:
         print(f"Failed to delete paste: {e}")
+
+def get_user_by_username(db: Session, username: str):
+    try:
+        user = db.query(User).filter(User.username == username).first()
+        return user
+    except Exception as e:
+        print(f"Failed to get user by username: {e}")
+        
+def create_user(db: Session, username: str, password: str):
+    try:
+        db_user = User(username=username, password=password)
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        print(f"Failed to create user: {e}")
